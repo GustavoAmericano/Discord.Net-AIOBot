@@ -1,7 +1,9 @@
-﻿using Discord;
+﻿using System;
+using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Example.Modules
@@ -13,8 +15,8 @@ namespace Example.Modules
 
         public HelpModule(CommandService service, IConfigurationRoot config)
         {
-            _service = service;
-            _config = config;
+            _service = service; // DI Service
+            _config = config;   // DI Config
         }
 
         [Command("help")]
@@ -26,17 +28,32 @@ namespace Example.Modules
                 Color = new Color(114, 137, 218),
                 Description = "These are the commands you can use"
             };
-            
+
             foreach (var module in _service.Modules)
             {
                 string description = null;
                 foreach (var cmd in module.Commands)
                 {
                     var result = await cmd.CheckPreconditionsAsync(Context);
+                    Console.WriteLine(Context.User);
                     if (result.IsSuccess)
-                        description += $"{prefix}{cmd.Aliases.First()}\n";
+                    {
+                        string parameters = "";
+                        string aliases = "";
+                        cmd.Parameters.ToList().ForEach(x => { parameters += $"[{x.Name}] "; });
+                        if (cmd.Aliases.Count > 1)
+                        {
+                            aliases = "(Aliases: ";
+                            cmd.Aliases.ToList().GetRange(1, cmd.Aliases.Count-1).ForEach(x => aliases += $"{prefix}{x}, ");
+                            aliases = aliases.Remove(aliases.Length - 2);
+                            aliases += ")";
+                        }
+                        description += $"{prefix}{cmd.Aliases.First()} {parameters} {aliases}\n";
+                    }
+
+
                 }
-                
+
                 if (!string.IsNullOrWhiteSpace(description))
                 {
                     builder.AddField(x =>
@@ -76,7 +93,7 @@ namespace Example.Modules
                 builder.AddField(x =>
                 {
                     x.Name = string.Join(", ", cmd.Aliases);
-                    x.Value = $"Parameters: {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" + 
+                    x.Value = $"Parameters: {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" +
                               $"Summary: {cmd.Summary}";
                     x.IsInline = false;
                 });

@@ -14,7 +14,7 @@ namespace Example.Modules
         public Task Say([Remainder]string text)
             => ReplyAsync(text);
         
-        [Group("set"), Name("Example")]
+        [Group("set"), Name("Setters")]
         [RequireContext(ContextType.Guild)]
         public class Set : ModuleBase
         {
