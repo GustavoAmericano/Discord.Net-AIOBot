@@ -1,36 +1,36 @@
-﻿using Discord;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace Example.Modules
 {
-    [Name("Example")]
+    [Name("St00f")]
     public class ExampleModule : ModuleBase<SocketCommandContext>
     {
-        [Command("say"), Alias("s")]
-        [Summary("Make the bot say something")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public Task Say([Remainder]string text)
-            => ReplyAsync(text);
-        
-        [Group("set"), Name("Setters")]
         [RequireContext(ContextType.Guild)]
         public class Set : ModuleBase
         {
-            [Command("nick"), Priority(1)]
-            [Summary("Change your nickname to the specified text")]
-            [RequireUserPermission(GuildPermission.ChangeNickname)]
-            public Task Nick([Remainder]string name)
-                => Nick(Context.User as SocketGuildUser, name);
-
-            [Command("nick"), Priority(0)]
-            [Summary("Change another user's nickname to the specified text")]
-            [RequireUserPermission(GuildPermission.ManageNicknames)]
-            public async Task Nick(SocketGuildUser user, [Remainder]string name)
+            [Command("sha256")]
+            [Summary("Converts plaintext to Sha-256")]
+            public async Task sha256(string input)
             {
-                await user.ModifyAsync(x => x.Nickname = name);
-                await ReplyAsync($"{user.Mention} I changed your name to **{name}**");
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    // ComputeHash - returns byte array  
+                    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                    // Convert byte array to a string   
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        builder.Append(bytes[i].ToString("x2"));
+                    }
+
+                    await ReplyAsync(builder.ToString());
+                }
             }
         }
     }

@@ -48,7 +48,7 @@ namespace Example.Modules
                             aliases = aliases.Remove(aliases.Length - 2);
                             aliases += ")";
                         }
-                        description += $"{prefix}{cmd.Aliases.First()} {parameters} {aliases}\n";
+                        description += $"`{prefix}{cmd.Aliases.First()} {parameters} \n{aliases}`\n\n";
                     }
 
 
