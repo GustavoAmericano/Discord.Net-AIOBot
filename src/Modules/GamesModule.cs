@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -15,23 +16,49 @@ namespace Example.Modules
 
         [Command("roll"), Alias("dice")]
         [Summary("Rolls a dice and prints the output.")]
-        public async Task RollDice(string sides = "6")
+        public async Task RollDice(string dices = "1", string sides = "6")
         {
-            if (!int.TryParse(sides, out int i))
+            if (!int.TryParse(dices, out int j))
             {
-                await ReplyAsync($"Invalid input. \nInput must be between 1 and {int.MaxValue}");
+                await ReplyAsync($"Invalid input at DICES. \nInput must be between 1 and 100");
                 return;
             }
 
-            if (i < 1)
+            if (j > 100)
             {
-                await ReplyAsync($"Invalid input. \nInput must be between 1 and {int.MaxValue}");
+                await ReplyAsync($"Invalid input at DICES. \nInput must be between 1 and 100");
                 return;
             }
-            await ReplyAsync($"Rolling a {sides} sided dice.. :game_die: ");
+
+            if (!int.TryParse(sides, out int i))
+            {
+                await ReplyAsync($"Invalid input at SIDES. \nInput must be between 1 and {int.MaxValue}");
+                return;
+            }
+
+            Math.Abs(i);
+            await ReplyAsync($"Rolling {dices}x {sides} sided dice.. :game_die: ");
             Random rnd = new Random();
-            int output = rnd.Next(1, i);
-            await ReplyAsync(output.ToString());
+            List<int> rolls = new List<int>();
+            for (int k = 0; k < j; k++)
+            {
+                rolls.Add(rnd.Next(1, i));
+            }
+
+            string rollsString = "";
+            for (var k = 0; k < rolls.Count; k++)
+            {
+                rollsString += rolls[k] + ",";
+                if (10 % i == 0) rollsString += "\n";
+                if (rollsString.Length >= 2000)
+                {
+                    rollsString = rollsString.Remove(2000);
+                    await ReplyAsync(rollsString);
+                    rollsString = "";
+                }
+                
+            }
+            await ReplyAsync($"Rolls are: {rollsString}");
         }
 
         [Command("hilo", RunMode = RunMode.Async)]

@@ -15,7 +15,7 @@ namespace Example.Modules
         {
             [Command("sha256")]
             [Summary("Converts plaintext to Sha-256")]
-            public async Task sha256(string input)
+            public async Task sha256([Remainder]string input)
             {
                 using (SHA256 sha256Hash = SHA256.Create())
                 {

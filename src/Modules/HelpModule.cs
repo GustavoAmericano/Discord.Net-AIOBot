@@ -26,7 +26,7 @@ namespace Example.Modules
             var builder = new EmbedBuilder()
             {
                 Color = new Color(114, 137, 218),
-                Description = "These are the commands you can use"
+                Description = "Available commands"
             };
 
             foreach (var module in _service.Modules)
@@ -35,7 +35,6 @@ namespace Example.Modules
                 foreach (var cmd in module.Commands)
                 {
                     var result = await cmd.CheckPreconditionsAsync(Context);
-                    Console.WriteLine(Context.User);
                     if (result.IsSuccess)
                     {
                         string parameters = "";
