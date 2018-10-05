@@ -41,8 +41,8 @@ namespace Example
             {
                 var result = await _commands.ExecuteAsync(context, argPos, _provider);     // Execute the command
 
-                if (!result.IsSuccess)     // If not successful, reply with the error.
-                    await context.Channel.SendMessageAsync(result.ToString());
+                //if (!result.IsSuccess)     // If not successful, reply with the error.
+                //    await context.Channel.SendMessageAsync(result.ToString());
             }
         }
     }

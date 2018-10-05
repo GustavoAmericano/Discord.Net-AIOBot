@@ -21,7 +21,7 @@ namespace Example.Modules
             msg.AddReactionAsync(new Emoji("🎊"));
             for (int i = 1; i <= minutes; i++)
             {
-                await Task.Delay(6000);
+                await Task.Delay(500);
                 await msg.ModifyAsync(x => x.Content = $"A giveaway has started, and will run for another {minutes-i} minutes!\n" +
                                                        $"React with the :confetti_ball: emoji to participate!\n" +
                                                        $"More info: {message}");
