@@ -14,7 +14,7 @@ namespace Example.Modules
     public class GamesModule : InteractiveBase
     {
 
-        [Command("roll"), Alias("dice")]
+        [Command("roll"), Alias("dice", "r")]
         [Summary("Rolls a dice and prints the output.")]
         public async Task RollDice(string dices = "1", string sides = "6")
         {
