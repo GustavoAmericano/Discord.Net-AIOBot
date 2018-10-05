@@ -251,6 +251,5 @@ paket-files/
 .idea/
 *.sln.iml
 
-#Config
+
 _configuration.json
-src/_configuration.json
