@@ -25,7 +25,7 @@ namespace Example.Modules
         [Command("forcenick"), Priority(0)]
         [Summary("Change another user's nickname to the specified text")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task Nick(SocketGuildUser user, [Remainder]string name)
+        public async Task FNick(SocketGuildUser user, [Remainder]string name)
         {
             await user.ModifyAsync(x => x.Nickname = name);
             await ReplyAsync($"{user.Mention} I changed your name to **{name}**");

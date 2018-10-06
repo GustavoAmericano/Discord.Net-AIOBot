@@ -35,7 +35,15 @@ namespace Example
                 File.Create(_logFile).Dispose();
 
             string logText = $"{DateTime.UtcNow.ToString("hh:mm:ss")} [{msg.Severity}] {msg.Source}: {msg.Exception?.ToString() ?? msg.Message}";
-            File.AppendAllText(_logFile, logText + "\n");     // Write the log text to a file
+                // Write the log text to a file
+            try
+            {
+                File.AppendAllText(_logFile, logText + "\n");
+            }
+            catch (Exception e)
+            {
+                Console.Out.WriteAsync(e.Message);
+            }
 
             return Console.Out.WriteLineAsync(logText);       // Write the log text to the console
         }
